@@ -1,0 +1,21 @@
+all login details for NEWS_BUZZ --->
+
+
+NOTE : Login as the superadmin to add new posts
+Super-Admin:->
+
+username: admin@gmail.com
+password: superadmin
+
+Admin:->
+
+username: admin@admin.com
+password: adminpass
+
+User:->
+
+username: user@gmail.com
+password: userpass 
+
+
+
