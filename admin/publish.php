@@ -1,6 +1,7 @@
 <?php
 include "header.php";
 include "includes/adminnav.php";
+include "functions.php";
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -22,13 +23,14 @@ include "includes/adminnav.php";
     </section>
     <?php
 if (isset($_POST['publish'])) {
+$category = $_POST['category'];
 require "../gump.class.php";
 $gump = new GUMP();
 $_POST = $gump->sanitize($_POST); 
 
 $gump->validation_rules(array(
     'title'    => 'required|max_len,120|min_len,15',
-    'tags'   => 'required|max_len,100|min_len,3',
+    'tags'   => 'required|max_len,15|min_len,3',
     'content' => 'required|max_len,20000|min_len,150',
 ));
 $gump->filter_rules(array(
@@ -75,7 +77,7 @@ echo "<script>alert('Image size is not proper');</script>";
         $imgext = strtolower(pathinfo($image, PATHINFO_EXTENSION) );
         $picture = rand(1000 , 1000000) .'.'.$imgext;
         if(move_uploaded_file($_FILES['image']['tmp_name'], $folder.$picture)) {
-            $query = "INSERT INTO posts (title,author,postdate,image,content,status,tag) VALUES ('$post_title' , '$post_author' , '$post_date' , '$picture' , '$post_content' , '$post_status', '$post_tag') ";
+            $query = "INSERT INTO `posts`(`category_id`, `title`, `author`, `postdate`, `image`, `content`, `status`, `tag`) VALUES ('$category', '$post_title', '$post_author', '$post_date', '$picture', '$post_content', '$post_status', '$post_tag');";
             $result = mysqli_query($conn , $query) or die(mysqli_error($conn));
             if (mysqli_affected_rows($conn) > 0) {
                 echo "<script> alert('News posted successfully.It will be published after admin approves it');
@@ -122,15 +124,25 @@ echo "<script>alert('Image size is not proper');</script>";
                         <label for="post_tag">Post Tags</label>
                         <input type="text" name="tags" placeholder = "ENTER SOME TAGS SEPERATED BY COMMA (,)" value= "<?php if(isset($_POST['publish'])) { echo $post_tag; } ?>" class="form-control" >
                       </div>
+                        <label for="" class="form-group">Select a category</label>
+                      <div class="input-group">
+                            <select class="form-control" name="category">
+                              <option value="">Select a category</option>
+                            <?php
+                              echo fill_category_list($conn);
+                            ?>
+                            </select>
+                      </div>
+                      <br>
                       <div class="form-group">
                         <label for="post_content">Post Content</label>
-                        <textarea class="form-control" name="content"  id="" cols="30" rows="15" ><?php if(isset($_POST['publish'])) { echo $post_content; } ?></textarea>
+                        <textarea class="form-control" name="content"  id="summernote" cols="30" rows="15" ><?php if(isset($_POST['publish'])) { echo $post_content; } ?></textarea>
                       </div>
                       <button type="submit" name="publish" class="btn btn-primary" value="Publish Post">Publish Post</button>
                     </div>
-                    <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
+                    <!-- <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
                       
-                      </div>
+                      </div> -->
                       
                     </div>
                   </div>
@@ -155,7 +167,7 @@ echo "<script>alert('Image size is not proper');</script>";
   <footer class="main-footer">
     <div class="float-right d-none d-sm-block">
     </div>
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+    <strong>Copyright &copy;<a href="https://adminlte.io">Dashboard</a>.</strong> All rights reserved.
   </footer>
 
   <!-- Control Sidebar -->
