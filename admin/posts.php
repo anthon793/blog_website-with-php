@@ -35,13 +35,14 @@
               <div class="card-body">
               <table id="example2" class="table table-bordered table-hover">
     <thead>
-        <tr>
-        <th>ID</th>
+      <tr>
+    <th>S/N</th>
                         <th>Author</th>
                         <th>Title</th>
                         <th>Status</th>
                         <th>Image</th>
-                        <th>Tags</th>
+                        <!-- <th>Tags</th> -->
+                        <th>Category</th>
                         <th>Date</th>
                         <th>View Post</th>
                         <th>Edit</th>
@@ -52,10 +53,13 @@
     <tbody>
     <?php
 
-$query = "SELECT * FROM posts ORDER BY id DESC";
+// $query = "SELECT * FROM posts ORDER BY id DESC";
+$query = "SELECT * FROM posts 
+    INNER JOIN categories ON categories.category_id = posts.category_id ORDER BY id DESC";
 $run_query = mysqli_query($conn, $query) or die(mysqli_error($conn));
 if (mysqli_num_rows($run_query) > 0) {
 while ($row = mysqli_fetch_array($run_query)) {
+   $count++;
     $post_id = $row['id'];
     $post_title = $row['title'];
     $post_author = $row['author'];
@@ -64,19 +68,22 @@ while ($row = mysqli_fetch_array($run_query)) {
     $post_content = $row['content'];
     $post_tags = $row['tag'];
     $post_status = $row['status'];
+    // $query2 = "SELECT category_name FROM categories "
+    $category_display = $row['category_name'];
 
     echo "<tr>";
-    echo "<td>$post_id</td>";
+    echo "<td>$count</td>";
     echo "<td>$post_author</td>";
     echo "<td>$post_title</td>";
     echo "<td>$post_status</td>";
     echo "<td><img  width='100' src='../allpostpics/$post_image' alt='Post Image' ></td>";
-    echo "<td>$post_tags</td>";
+    // echo "<td>$post_tags</td>";
+    echo "<td>$category_display</td>";
     echo "<td>$post_date</td>";
     echo "<td><a href='viewposts.php?post=$post_id' style='color:green'>See Post</a></td>";
     echo "<td><a href='editposts.php?id=$post_id'><span class='fa fa-edit' style='color: #265a88;'></span></a></td>";
-    echo "<td><a class= 'btn btn-danger' onClick=\"javascript: return confirm('Are you sure you want to delete this post?')\" href='?del=$post_id'>Delete</a></td>";
-    echo "<td><a  class= 'btn btn-success' onClick=\"javascript: return confirm('Are you sure you want to publish this post?')\"href='?pub=$post_id'>Publish</a></td>";
+    echo "<td><a class= 'btn btn-danger btn-sm' onClick=\"javascript: return confirm('Are you sure you want to delete this post?')\" href='?del=$post_id'>Delete</a></td>";
+    echo "<td><a  class= 'btn btn-success btn-sm' onClick=\"javascript: return confirm('Are you sure you want to publish this post?')\"href='?pub=$post_id'>Publish</a></td>";
 
     echo "</tr>";
 
