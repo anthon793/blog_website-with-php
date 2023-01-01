@@ -65,6 +65,30 @@ include('dashboard.php');
             </div>
           </div>
         </div>
+
+        
+          <!--Small column-->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3>
+                <?php $query = "SELECT * FROM categories";
+                    $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
+                    $post_num = mysqli_num_rows($result);
+                    echo "<div class='text-left huge'>{$post_num}</div>";
+                    ?>
+                </h3>
+                <p>Blog Categories</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-folder"></i>
+              </div>
+              <a href="../admin/view_categories.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+        </div>
+        
         <!-- /.row -->
         <!-- Main row -->
         <div class="row">
